@@ -9,10 +9,57 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Ivy's Assignment 2!</h1>
+    <h1>Ivy's Assignment 2: Fade!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
+      <img src="a2_gif.gif" />
       <p>Here is all the documentation for assignment 2!</p>
     </div>
+    <img src="a2_circuit.jpg"/>
+    <p>This is the circuit itself! The gif on the top of the page shows the function itself of the circuit.</p>
+    <img src="a2_resistor_reasoning.PNG"/>
+    <p>This is why I chose the resistors that I had chosen for my circuit. I had chosen a 220 Ohm resistor and a 10K Ohm resistor.</p>
+    <h2>Firmware</h2>
+    <code>// constants won't change. They're used here to set pin numbers:
+      const int buttonPin = 2;  // the number of the pushbutton pin
+      const int ledPin = 10;    // the number of the LED pin
+      const int ledPin2 = 13; //the number of the other LED pin
+      
+      // variables will change:
+      int buttonState = 0;  // variable for reading the pushbutton status
+      
+      void setup() {
+        // initialize the LED pin as an output:
+        pinMode(ledPin, OUTPUT);
+        // initialize the LED pin as an output:
+        pinMode(ledPin2, OUTPUT);
+        // initialize the pushbutton pin as an input:
+        pinMode(buttonPin, INPUT);
+      }
+      
+      void loop() {
+        // read the state of the pushbutton value:
+        buttonState = digitalRead(buttonPin);
+      
+        // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+        if (buttonState == HIGH) {
+          // turn LED 2 on:
+          digitalWrite(ledPin2, HIGH);
+          //loop to fade on LED    
+          for(int i = 0; i < 255; i++) {
+            analogWrite(ledPin, i);   // turns on LED at a certain brightness
+            delay(10);                // delays the brightness of the LED
+          }
+          digitalWrite(ledPin, HIGH); //keeps the LED on
+      
+        } else {
+          // turn LEDs off:
+          digitalWrite(ledPin2, LOW); //turns non-fading LED off
+          digitalWrite(ledPin, LOW); //turns fading LED off
+        }
+      }
+      </code>
+      <h2>Additional Questions</h2>
+      <p>Draw a chart where X axis is time and the Y axis is voltage. Draw 3 lines representing the voltage across an LED with analogWrite(led, 64), 
+        analogWrite(led,128), and analogWrite(led, 255).</p>
   </body>
 </html>
