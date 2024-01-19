@@ -19,47 +19,53 @@
     <img src="a2_resistor_reasoning.PNG"/>
     <p>This is why I chose the resistors that I had chosen for my circuit. I had chosen a 220 Ohm resistor and a 10K Ohm resistor.</p>
     <h2>Firmware</h2>
-    <code>// constants won't change. They're used here to set pin numbers:
-      const int buttonPin = 2;  // the number of the pushbutton pin
-      const int ledPin = 10;    // the number of the LED pin
-      const int ledPin2 = 13; //the number of the other LED pin
-      
-      // variables will change:
-      int buttonState = 0;  // variable for reading the pushbutton status
-      
-      void setup() {
-        // initialize the LED pin as an output:
-        pinMode(ledPin, OUTPUT);
-        // initialize the LED pin as an output:
-        pinMode(ledPin2, OUTPUT);
-        // initialize the pushbutton pin as an input:
-        pinMode(buttonPin, INPUT);
-      }
-      
-      void loop() {
-        // read the state of the pushbutton value:
-        buttonState = digitalRead(buttonPin);
-      
-        // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
-        if (buttonState == HIGH) {
-          // turn LED 2 on:
-          digitalWrite(ledPin2, HIGH);
-          //loop to fade on LED    
-          for(int i = 0; i < 255; i++) {
-            analogWrite(ledPin, i);   // turns on LED at a certain brightness
-            delay(10);                // delays the brightness of the LED
-          }
-          digitalWrite(ledPin, HIGH); //keeps the LED on
-      
-        } else {
-          // turn LEDs off:
-          digitalWrite(ledPin2, LOW); //turns non-fading LED off
-          digitalWrite(ledPin, LOW); //turns fading LED off
-        }
-      }
+    <code>// constants won't change. They're used here to set pin numbers: <br>
+      const int buttonPin = 2;  // the number of the pushbutton pin <br>
+      const int ledPin = 10;    // the number of the LED pin<br>
+      const int ledPin2 = 13; //the number of the other LED pin<br>
+      <br>
+      // variables will change:<br>
+      int buttonState = 0;  // variable for reading the pushbutton status<br>
+      <br>
+      void setup() {<br>
+        // initialize the LED pin as an output:<br>
+        pinMode(ledPin, OUTPUT);<br>
+        // initialize the LED pin as an output:<br>
+        pinMode(ledPin2, OUTPUT);<br>
+        // initialize the pushbutton pin as an input:<br>
+        pinMode(buttonPin, INPUT);<br>
+      }<br>
+      <br>
+      void loop() {<br>
+        // read the state of the pushbutton value:<br>
+        buttonState = digitalRead(buttonPin);<br>
+        <br>
+        // check if the pushbutton is pressed. If it is, the buttonState is HIGH:<br>
+        if (buttonState == HIGH) {<br>
+          // turn LED 2 on:<br>
+          digitalWrite(ledPin2, HIGH);<br>
+          //loop to fade on LED    <br>
+          for(int i = 0; i < 255; i++) { <br>
+            analogWrite(ledPin, i);   // turns on LED at a certain brightness<br>
+            delay(10);                // delays the brightness of the LED<br>
+          }<br>
+          digitalWrite(ledPin, HIGH); //keeps the LED on<br>
+          <br>
+        } else {<br>
+          // turn LEDs off:<br>
+          digitalWrite(ledPin2, LOW); //turns non-fading LED off<br>
+          digitalWrite(ledPin, LOW); //turns fading LED off<br>
+        }<br>
+      }<br>
       </code>
       <h2>Additional Questions</h2>
       <p>Draw a chart where X axis is time and the Y axis is voltage. Draw 3 lines representing the voltage across an LED with analogWrite(led, 64), 
         analogWrite(led,128), and analogWrite(led, 255).</p>
+      <img src="a2_graph.PNG"/>
+      <p>This graph shows a red LED that uses 1.8 voltage and it flashing at different speeds due to the effects of analogWrite at different values.</p>
+      <br>
+      <p>Given your schematic, circuit, and firmware, assuming the only thing that draws current is your LEDs, how long would your circuit run if powered by a 1200 mAh battery?</p>
+      <img src="a2_additionalq2.PNG"/>
+      <p>With my schematic, circuit, and firmware, it would run for about 55.17 hours, assuming that the button was held the entire time!</p>
   </body>
 </html>
