@@ -11,8 +11,86 @@
   <body>
     <h1>Ivy's Assignment 3!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
+      <img src="a3_gif.gif" />
       <p>Here is all the documentation for assignment 3!</p>
     </div>
+    <img src="a3_circuit.jpg"/>
+    <p>Here is an image of the circuit I had created.</p>
+    <img src="a3_schematic.PNG"/>
+    <p>Above is an image of the schematic of the circuit.</p>
+    <img src="a3_math1.PNG"/>
+    <p>Here I explain the relationship between the variable resistor (photoresistor) and the voltage you can measure at that point.</p> <br>
+    <code> // These constants won't change. They're used to give names to the pins used: <br>
+      const int analogInPin = A0;  // Analog input pin that the potentiometer is attached to <br>
+      const int analogOutPin = 9;  // Analog output pin that the LED is attached to <br>
+      const int analogOutPin2 = 10; //Analog output pin that the LED is attached to, two! <br>
+      <br>
+      int sensorValue = 0;  // value read from the pot<br>
+      int outputValue = 0;  // value output to the PWM (analog out)<br>
+      int outputValue2 = 255; // value output to the PWM (analog out)<br>
+      <br>
+      int sensorMin = 1023;  // minimum sensor value<br>
+      int sensorMax = 0;     // maximum sensor value<br>
+      <br>
+      void setup() {<br>
+        // calibrate during the first five seconds<br>
+        while (millis() < 5000) {<br>
+          sensorValue = analogRead(analogInPin);<br>
+          <br>
+          // record the maximum sensor value<br>
+          if (sensorValue > sensorMax) {<br>
+            sensorMax = sensorValue;<br>
+          }<br>
+          // record the minimum sensor value<br>
+          if (sensorValue < sensorMin) {<br>
+            sensorMin = sensorValue;<br>
+          }<br>
+        }<br>
+        // initialize serial communications at 9600 bps:<br>
+        Serial.begin(9600);<br>
+      }<br>
+      <br>
+      void loop() {<br>
+        // read the analog in value:<br>
+        sensorValue = analogRead(analogInPin);<br>
+        sensorValue = constrain(sensorValue, sensorMin, sensorMax);<br>
+        // map it to the range of the analog out:<br>
+        outputValue = map(sensorValue, sensorMin, sensorMax, 0, 255);<br>
+        // map it to the range of the analog out, but with an inverse relationship<br>
+        outputValue2 = map(sensorValue, sensorMin, sensorMax, 255, 0);<br>
+        <br>
+        // change the analog out value:<br>
+        if(outputValue < 15) { //checks that light levels of the photoresistor<br>
+          analogWrite(analogOutPin, 0); // sets analogOutPin to 0 if under a certain amount of light, which turns off an LED<br>
+          analogWrite(analogOutPin2, 255); // sets analogOutPin2 to 255 if under a certain amount of light, which turns on an LED completely<br>
+        } else { // if over a certain amount of light<br>
+          analogWrite(analogOutPin, outputValue); // sets analogOutPin in accordance to the amount of light the photoresistor detects. If more light, the more it lights up.<br>
+          analogWrite(analogOutPin2, outputValue2); // sets analogOutPin2 in inverse to the amount of light the photoresistor detects. If more light, the more it gets.<br>
+        }<br>
+        <br>
+        // print the values of sensorValue, outputValue, and outputValue2 to the Serial Monitor:<br>
+        Serial.print("sensor = "); //prints "sensor"<br> 
+        Serial.print(sensorValue); //prints out the value that the photoresistor senses<br>
+        Serial.print("\t output = "); //prints out "output"<br>
+        Serial.println(outputValue); //prints out the original mapped value<br>
+        Serial.print("\t output2 = "); //prints out "output2"<br>
+        Serial.println(outputValue2);<br>
+        <br>
+        // wait 100 milliseconds before the next loop for the analog-to-digital<br>
+        // converter to settle after the last reading:<br>
+        delay(100);<br>
+      }<br>
+    </code>
+    <h2>Additional Questions</h2>
+    <h3>In your voltage divider, can the variable resistor be either R1 or R2 or does it need to be one or the other? Justify your answer with example calculations.</h3>
+    <p>Yes. The code won't work as expected, but it is something you can work around easily. Below is my work.</p>
+    <img src="a3_math2.PNG"/>
+    <h3>Draw a graph where the x-axis is time and the y-axis is voltage. Plot the voltage at V-measure of your voltage divider of your shared gif.</h3>
+    <img src="a3_graph.PNG"/>
+    <h3>AnalogWrite and analogRead are respectively 8-bit and 10-bit values. Imagine you had 10-bit PWM and a 16-bit analog-to-digital converter instead.
+       How would this change your map() code? Explain your answer.</h3>
+    <p>If we had a 10-bit PWM and we had to read a 8-bit value, I would map it from 0 - 255 to 0 - 1023. If we had a 16-bit PWM and we had to read a 10-bit value, I would map it from
+      0 - 1023 to 0 - 65535. This is based on how binary works. The max val of n-bit integer is (2^n)-1. When n = 10, (2^10)-1 = 1023. When n = 16, (2^16)-1 = 65535.
+    </p>
   </body>
 </html>
