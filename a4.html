@@ -15,5 +15,86 @@
       <p>Here is all the documentation for assignment 3!</p>
     </div>
     <img src="a4_circuit.jpg"/>
+    <p>Above is a picture of the circuit and the capacitative sensor and Servo motor itself! I used a serving spoon as the sensor.</p>
+    <h2>Schematic</h2>
+    <img src="a4_schematic.PNG"/>
+    <h2>Code</h2>
+    <code>
+        #include <CapacitiveSensor.h> // allows the use of the CapacitiveSensor library, which acts as the input <br>
+            #include <Servo.h> // allows the use of the Servo library, which acts as the output <br>
+                <br>
+            CapacitiveSensor cs_4_2 = CapacitiveSensor(7,5);    	// 1 megohm resistor between pins 7 & 5, pin 5 is sensor pin, add wire, metal thing<br>
+            Servo myServo; // create a Servo object<br>
+            <br>
+            const int pwm = 11; // the output PWM that the Servo is attached to<br>
+            <br>
+            //runs once at setup<br>
+            void setup() {<br>
+              cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF); 	// turn off autocalibrate on channel 1 - just as an example<br>
+              myServo.attach(pwm);  // links the Servo to the PWM pin<br>
+              Serial.begin(9600);   // begins the Serial monitor<br>
+            }<br>
+            <br>
+            // runs repeatedly<br>
+            void loop()               	 <br>
+            {<br>
+                long start = millis();  // returns the number of milliseconds since the device begins running the program<br>
+                long total1 =  cs_4_2.capacitiveSensor(30); // runs a sensor check 30 times to avoid errors and filters for bad data<br>
+                <br>
+                Serial.print(millis() - start);    	// check on performance in milliseconds<br>
+                Serial.print("\t");                	// tab character for debug window spacing<br>
+                <br>
+                Serial.println(total1);            	// print sensor output 1<br>
+                delay(10);                         	// arbitrary delay to limit data to serial port<br>
+                <br>
+              if (total1 > 200) { //checks if the spoon is being touched<br>
+                myServo.write(180); // sets an angle of 180 to the Servo<br>
+                delay(100); // allows a delay for the Servo to move a bit<br>
+                myServo.write(0); // sets an angle of 0 to the Servo<br>
+                delay(100); // allows a delay for the Servo to move a bit. The Servo does not actually move the entire 180 degrees, but it jiggles.<br>
+              }<br>
+            }
+    </code>
+    <h1>Additional Questions</h1><br>
+    <h3>Question 1: Say you are using a servo motor you attach to pin 9. In your loop() you have the following code:
+        for (int i=0, i<180, i++){servo.write(i); delay(100);}
+        Draw a graph with the X axis in seconds, for two seconds, and the y-axis the voltage at pin 9 with respect to ground.</h3>
+    <img src="a4_q1graph.PNG"/>
+    <h3>Question 2: Your input device is slightly broken, leading it to give us an erroneous reading 1% of the time. How can we address this? Answer in (pseudo)code.</h3>
+    <code>
+        void setup(){ <br>
+            gathered data = test for 5 seconds //collects over 100 data points within 5 seconds<br>
+            check gathered data<br>
+            get rid of beginning 5% and end 5% of the data <br>
+            newMin = new beginning of data <br>
+            newMax = new end of data <br>
+        }<br>
+        void loop(){<br>
+            sensorValue = activated sensor<br>
+            if sensorValue > newMax {<br>
+                throw it away!<br>
+            } elseif sensorValue < newMin {<br>
+                throw it away!<br>
+            } else {<br>
+                activate output<br>
+            }<br>
+        }
+    </code>
+    <h3>Question 3: Your input device is slightly noisy, leading the measurement to randomly deviate from the true measurement 
+        up or down by 10%. How can we address this? Answer in (pseudo)code.</h3>
+
+    <code>
+        // goal: get as close to the true measurement as possible <br>
+        void setup(){<br>
+            gathered data = test for 10 seconds //collects over 200 data points<br>
+            average the gathered data //it should average near the true measurement!<br>
+        }<br>
+        <br>
+        void loop(){<br>
+            add new values to gathered data<br>
+            average the values<br>
+            update average value //this should be closer to the true measurement as it loops<br>
+        }
+    </code>
 </body>
 </html>
