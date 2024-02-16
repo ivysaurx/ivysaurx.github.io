@@ -63,10 +63,34 @@
     </p>
     <h3>Question 2: Draw a schematic for a circuit with using at least your arduino, a DC motor, a flyback diode, 
         and capacitors between power and ground. Find parts with datasheets you could use for each of these schematic components.</h3>
-    <img src=""/>
+    <img src="a5_q2.PNG"/>
     <h3>Question 3: Here is the datasheet for the L293D chip: https://www.ti.com/product/L293D. 
         Draw a schematic using at least your arduino, this chip, and two motors. Write (pseudo) code that shows how you would move the 
         motors both forward, both back, then one forward one back, and one back then forward.</h3>
-    <img src=""/>
+    <img src="a5_q3.PNG"/>
+    <code>
+        //pin 2 and 7 are pairs in the Arduino <br>
+        //pin 3 and 8 are pairs in the Arduino<br>
+        // both pairs are connected to the L293D's pins 2 and 7 that can manipulate the direction of the motor<br>
+        <br>
+        // both motors FORWARD<br>
+        pin 2 HIGH<br>
+        pin 7 LOW<br>
+        pin 3 HIGH<br>
+        pin 8 LOW<br>
+        <br>
+        // one forward, one back<br>
+        pin 2 HIGH<br>
+        pin 7 LOW<br>
+        pin 3 LOW<br>
+        pin 8 HIGH<br>
+        <br>
+        // one back, one forward<br>
+        <br>
+        pin 2 LOW<br>
+        pin 7 HIGH<br>
+        pin 3 HIGH<br>
+        pin 8 LOW<br>
+    </code>
     </body>
 </html>
