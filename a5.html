@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Ivy's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Ivy's Assignment 5!</h1>
+    <div class="header">
+      <img src="a5_gif.gif" />
+      <p>Here is all the documentation for assignment 5!</p>
+    </div>
+    <img src="a5_circuit.jpg"/>
+    <p>Above is my circuit, which fades on the LED strip when my mother touches the screwdriver!</p>
+
+    <h3>Schematic</h3>
+    <img src="a5_schematic.PNG"/>
+    <p>The most current the transistor could handle is 80A, according to the datasheet.</p>
+    <h3>Code</h3>
+    <code>
+        #include <CapacitiveSensor.h> // allows the use of the CapacitiveSensor library, which acts as the input <br>
+            <br>
+            CapacitiveSensor cs_4_2 = CapacitiveSensor(7,5);    	// 1 megohm resistor between pins 7 & 5, pin 5 is sensor pin, add wire, metal thing<br>
+            int ledPin = 9;  // LED connected to digital pin 9<br>
+            <br>
+            //runs once at setup<br>
+            void setup() {<br>
+            Serial.begin(9600);  //beings the serial monitor<br>
+            }<br>
+            <br>
+            //runs repeatedly<br>
+            void loop() {<br>
+                <br>
+              long start = millis();  // returns the number of milliseconds since the device begins running the program<br>
+                long total1 =  cs_4_2.capacitiveSensor(30); // runs a sensor check 30 times to avoid errors and filters for bad data<br>
+                <br>
+                Serial.print(millis() - start);    	// check on performance in milliseconds<br>
+                Serial.print("\t");                	// tab character for debug window spacing<br>
+                <br>
+                Serial.println(total1);            	// print sensor output 1<br>
+                delay(10);                         	// arbitrary delay to limit data to serial port<br>
+                <br>
+              if (total1 > 500) { //checks if screwdriver is being touched<br>
+                // fade in from min to max in increments of 5 points:<br>
+                for (int fadeValue = 0; fadeValue <= 255; fadeValue += 5) {<br>
+                  // sets the value (range from 0 to 255):<br>
+                  analogWrite(ledPin, fadeValue);<br>
+                  // wait for 30 milliseconds to see the dimming effect<br>
+                  delay(30);<br>
+                }<br>
+              }<br>
+            }     
+    </code>
+    <h2>Additional Questions</h2>
+    <h3>Question 1:This is the datasheet for the n-mosfet transistor: https://www.diodes.com/assets/Datasheets/DMT6009LCT.pdf.
+         What is the absolute maximum amount of current between pins 2 and 3?</h3>
+    <p>It should be 80A. Pins 2 and 3 and the drain and source, which means that the maximum current that could be handled between them should
+        be the maximum the entire transistor could handle.
+    </p>
+    <h3>Question 2: Draw a schematic for a circuit with using at least your arduino, a DC motor, a flyback diode, 
+        and capacitors between power and ground. Find parts with datasheets you could use for each of these schematic components.</h3>
+    <img src=""/>
+    <h3>Question 3: Here is the datasheet for the L293D chip: https://www.ti.com/product/L293D. 
+        Draw a schematic using at least your arduino, this chip, and two motors. Write (pseudo) code that shows how you would move the 
+        motors both forward, both back, then one forward one back, and one back then forward.</h3>
+    <img src=""/>
+    </body>
+</html>
