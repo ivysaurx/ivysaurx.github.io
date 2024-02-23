@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Ivy's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Ivy's Assignment 6!</h1>
+    <div class="header">
+        <img src="a6_gif.gif"
+      <p>Here is all the documentation for assignment 6!</p>
+    </div>
+    <img src="a6_circuit.jpg"/>
+    <p>Above is my circuit. when pressing the button, the screen turns from "not pressed" to "pressed!". <br>
+        When typing into the keyboard, the light of the LED changes depending on the ASCII unicode of the key that is pressed.
+        In the video, I am pressing "0" and the spacebar, which doesn't change the light much, but it still changes.</p>
+    <h3>Schematic</h3>
+    <img src="a6_schematic.PNG"/>
+    <p>Above is my schematic. I had to use a 10k resistor for the button and a 220 resistor for the red LED.</p> <br>
+    <h3>Code</h3>
+    <h4>Arduino</h4>
+    <code>
+        const int BUTTON_PIN = 2; // input pin from Arduino, yet to be set <br>
+        const int LED_PIN = 5; //PWM pin from Arduino<br>
+        <br>
+        void setup()<br>
+        {<br>
+        Serial.begin(9600); // begins serial<br>
+        Serial.setTimeout(10); // sets maximum seconds for serial data<br>
+        pinMode(BUTTON_PIN, INPUT); // sets the button as an input for the web<br>
+        pinMode(LED_PIN, OUTPUT); // sets LED as an output from the web<br>
+        }<br>
+        <br>
+        void loop()<br>
+        {<br>
+        Serial.println(digitalRead(BUTTON_PIN));<br>
+        delay(50);<br>
+        if (Serial.available() > 0) {   // if there's serial data <br>
+            int inByte = Serial.read(); // read it<br>
+            analogWrite(5, inByte);	// use it to set the LED brightness<br>
+        }<br>
+        }<br>
+    </code>
+    <h4>JS</h4>
+    <code>
+        const BAUD_RATE = 9600; // This should match the baud rate in your Arduino sketch <br>
+        <br>
+        let port, connectBtn; // Declare global variables<br>
+        <br>
+        function setup() {<br>
+        setupSerial(); // Run our serial setup function (below)<br>
+        <br>
+        // Create a canvas that is the size of our browser window.<br>
+        // windowWidth and windowHeight are p5 variables<br>
+        createCanvas(windowWidth, windowHeight);<br>
+        <br>
+        // p5 text settings. BOLD and CENTER are constants provided by p5.<br>
+        // See the "Typography" section in the p5 reference: https://p5js.org/reference/<br>
+        textFont("system-ui", 50);<br>
+        textStyle(BOLD);<br>
+        textAlign(CENTER, CENTER);<br>
+        }<br>
+        <br>
+        function draw() {<br>
+        const portIsOpen = checkPort(); // Check whether the port is open (see checkPort function below)<br>
+        if (!portIsOpen) return; // If the port is not open, exit the draw loop<br>
+        <br>
+        let str = port.readUntil("\n"); // Read from the port until the newline<br>
+        if (str.length == 0) return; // If we didn't read anything, return.<br>
+        <br>
+        // trim the whitespace (the newline) and convert the string to a number<br>
+        const buttonState = Number(str.trim());<br>
+        <br>
+        // Change text and colors based on button state. In p5, you can set colors<br>
+        // using standard CSS color names as well as many other color formats.<br>
+        if (buttonState === 0) {<br>
+            // If the button is not pressed<br>
+            background("darkcyan"); // Background color<br>
+            fill("coral"); // Fill color for the text<br>
+            text("not pressed", windowWidth / 2, windowHeight / 2); // Position text in center of the screen<br>
+        } else if (buttonState === 1) {<br>
+            // If the button is pressed<br>
+            background("lightskyblue"); // Background color<br>
+            fill("yellow"); // Fill color for the text<br>
+            text("pressed!", windowWidth / 2, windowHeight / 2); // Position text in center of the screen<br>
+        }<br>
+        }<br>
+        <br>
+        // function to check key pressing<br>
+        function keyPressed() {<br>
+            console.log("writing key", key); // prints to console<br>
+            port.write(key); // writes the key to the Arduino LED<br>
+        }<br>
+        <br>
+        // Three helper functions for managing the serial connection.<br>
+        <br>
+        function setupSerial() {<br>
+        port = createSerial();<br>
+
+        // Check to see if there are any ports we have used previously<br>
+        let usedPorts = usedSerialPorts();<br>
+        if (usedPorts.length > 0) {<br>
+            // If there are ports we've used, open the first one<br>
+            port.open(usedPorts[0], BAUD_RATE);<br>
+        }<br>
+
+        // create a connect button<br>
+        connectBtn = createButton("Connect to Arduino");<br>
+        connectBtn.position(5, 5); // Position the button in the top left of the screen.<br>
+        connectBtn.mouseClicked(onConnectButtonClicked); // When the button is clicked, run the onConnectButtonClicked function<br>
+        }<br>
+        <br>
+        function checkPort() {<br>
+        if (!port.opened()) {<br>
+            // If the port is not open, change button text<br>
+            connectBtn.html("Connect to Arduino");<br>
+            // Set background to gray<br>
+            background("gray");<br>
+            return false;<br>
+        } else {<br>
+            // Otherwise we are connected<br>
+            connectBtn.html("Disconnect");<br>
+            return true;<br>
+        }<br>
+        }<br>
+
+        function onConnectButtonClicked() {<br>
+        // When the connect button is clicked<br>
+        if (!port.opened()) {<br>
+            // If the port is not opened, we open it<br>
+            port.open(BAUD_RATE);<br>
+        } else {<br>
+            // Otherwise, we close it!<br>
+            port.close();<br>
+        }<br>
+        }<br>
+    </code>
+    <!-- <h4>HTML</h4> -->
+    <!-- <code>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
+            <script src="https://unpkg.com/@gohai/p5.webserial@^1/libraries/p5.webserial.js"></script>
+            <title>Button Press!</title>
+            <style>
+            html,
+            body {
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            canvas {
+                display: block;
+            }
+            </style>
+        </head>
+        <body>
+            <script src="index.js"></script>
+        </body>
+        </html>
+
+    </code> -->
+</body>
+</html>
