@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Ivy's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Rice Dispenser!</h1>
+    <div class="header">
+      <p>Here is all the documentation for my final project!</p>
+    </div>
+    <video width="1280" height="720" controls>
+        <source src="finalproject_video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <br>
+      <h3>Sketch of the Design</h3>
+      <img src="finalproject_sketch.PNG"/>
+      <p>The way this contraption works is that it utilizes gravity. The stepper motor, with a plastic rectangle attached to it, has a primary function of rotating.
+        If I push a button, the stepper motor will rotate the plastic about 90 degrees.
+        When the plastic is in a certain position, it covers a hole at the bottom of the jar. When the stepper motor rotates and pauses at a certain position, the
+        hole is uncovered and rice falls out into the container underneath!
+      </p>
+      <img src="finalproject_explain1.PNG"/>
+      <p>Above is an image of the stepper motor and a ULN2003A. The stepper motor connects to the ULN2003A, which has 4 input pins, a power and a ground pin, and an area that connects 
+        the stepper motor to the ULN2003A, which then is connected to the Arduino.
+      </p>
+      <br>
+      <h3>Schematic</h3>
+      <img src="finalproject_schematic.PNG"/>
+      <p>This is my schematic. I used a 10k Ohm resistor to bring the button to ground. The schematic on the right, however, has resistors built into its structure,
+        which means I did not need any additional resistors to use it. It uses a 2.7k, a 7.2k, and a 3k resistor. It also has 4 input pins, which I had connected
+        pins 8 to 11 on the Arduino to.
+      </p>
+      <br>
+      <h3>Code</h3>
+      <code>
+        #include <Stepper.h> // allows the use of the Stepper library, which acts as the output <br>
+            const int revolution = 2048;<br>
+            const int qtrPerRevolution = 512;<br>
+            // constants won't change. They're used here to set pin numbers:<br>
+            const int buttonPin = 2;  // the number of the pushbutton pin<br>
+            // use pin 8-11 to IN1-IN4<br>
+            Stepper stepper = Stepper(revolution, 8, 10, 9, 11);<br>
+            <br>
+            // variables will change:<br>
+            int buttonState = 0;  // variable for reading the pushbutton status<br>
+            <br>
+            void setup() {<br>
+              // initialize the button as input and stepper's initial speed<br>
+              pinMode(buttonPin, INPUT);<br>
+              stepper.setSpeed(10); //sets the speed of stepper motor to 10 revolutions per minute<br>
+            }<br>
+            <br>
+            void loop() {<br>
+              // read the state of the pushbutton value:<br>
+              buttonState = digitalRead(buttonPin);<br>
+              <br>
+              // check if the pushbutton is pressed. If it is, the buttonState is HIGH:<br>
+              if (buttonState == HIGH) {<br>
+                delay(100); //creates an arbitrary delay<br>
+                stepper.step(qtrPerRevolution); //rotates the stepper motor 90 degrees<br>
+              }<br>
+            }
+      </code>
+
+      <br>
+      <h3>Challenges</h3>
+      <p>This had a lot of challenges. Even though, admittedly, this looks like a crafts project, it was mechanically much more difficult than what I had originally thought.
+        My original sketch actually had the hole on the side of the box, and I was expecting the pressure to shoot the rice out easily. I also had the complication of the weight of the rice
+        , which changed my original plan of a Servo motor to a Stepper motor. <br>
+        I had to melt a hole the box, which caused several smoke alarms to go off. The melted plastic also, then, blocked the way of the rectangular plastic from even moving. Then I realized
+        that the rice was, in fact, not going to smoothly come out, which meant I had to rotate the entire box, which messed up the placement of my wires a bit. Then, my stepper motor burned
+        out and I had to quickly purchase a pack of new ones and had to do a little bit of debugging on the code.<br>
+        It turned out that it was not easy at all, but thankfully, I had managed to do it with a satisfying result!
+      </p>
+    </body>
+</html>
